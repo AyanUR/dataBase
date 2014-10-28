@@ -1,0 +1,118 @@
+create schema empresa;
+use empresa;
+create table empleado(name char(11) not null,surnamePater char(11) not null,surnameMater char(11) not null,nss char(17) not null,sexo char, salario int not null,addres char(30) not null,datebirh date,nssSuper char (17) ,nd int ,primary key(nss),foreign key(nssSuper) references empleado(nss) on update cascade on delete cascade);
+create table dependiente(nss char(17) not null, name char(33) not null,parentesco char(7) not null,datebirh date not null,primary key(name,nss), foreign key(nss) references empleado(nss) on update cascade on delete cascade);
+create table proyecto(numero int not null,name char(11) not null,numeroDepartamento int not null,address char(30) not null,primary key(numero));
+create table workIn(nssEmpleado char(17) not null,numeroProyecto int not null,hours int not null,primary key(nssEmpleado,numeroProyecto), foreign key(nssEmpleado) references empleado(nss) on update cascade on delete cascade,foreign key(numeroProyecto) references proyecto(numero) on update cascade on delete cascade);
+create table departamento(name char(11) not null,numero int not null,nssGerente char(17) not null,inicio date not null,primary key(numero),foreign key(nssGerente) references empleado(nss) on update cascade on delete cascade );
+create table lugar(numeroDepartamento int not null,ubicacion char(30) not null,primary key(numeroDepartamento,ubicacion),foreign key(numeroDepartamento) references departamento(numero) on update cascade on delete cascade);
+alter table empleado add foreign key(nd) references departamento(numero) on update cascade on delete cascade;
+alter table proyecto add foreign key(numeroDepartamento) references departamento(numero) on update cascade on delete cascade;
+insert into empleado values('ayan','urban','reyes','2012630450','m',17311,'ayende numero 18 tultepec','1993-12-29','2012630450',null);
+insert into departamento values('google',7,'2012630450','2000-06-7');
+insert into empleado values('moises','morales','almaras','2012630330','m',7311,'istapalama edo mexico','1993-04-04','2012630450',7);
+insert into empleado values('lisvet','monroy','muños','2012635864','f',7311,'villa de las flores edo mexico','1993-07-16','2012630450',7);
+insert into empleado values('daniel','cevedo','alcaras','2012639764','m',1311,'coacalco edo mexico','1993-08-16','2012630450',7);
+insert into departamento values('investigacion',5,'2012635864','2005-05-25');
+insert into empleado values('oscar','cano','vargas','2012636954','m',14311,'azcapotzalco df','1993-11-17','2012635864',5);
+insert into empleado values('iris','lopez','castro','2012631234','f',1311,'indioz verdes df','1993-11-17','2012635864',5);
+insert into empleado values('angel','soto','baños','2012634892','m',3211,'satelite edo mexico','1993-02-11','2012635864',5);
+insert into empleado values('marizol','cortes','herndes','2012631731','f',70000,'miracho tultepec mexico','1993-09-12','2012631731',null);
+insert into departamento values('contaduria',11,'2012631731','2014-07-11');
+insert into empleado values('alexa','escovedo','bermudes','2012631373','f',5000,'reforma tultepec mexico','1993-05-17','2012631731',11);
+insert into empleado values('tania','benites','rodriges','2012631173','f',11000,'iztacalco df','1993-11-11','2012631731',11);
+insert into empleado values('alejandra','felizidad','forever','2012631111','f',17000,'desierto de los leones','1993-07-07','2012631731',11);
+update empleado set nd=11 where nss='2012631731';
+update empleado set nd=7 where nss='2012630450';
+insert into dependiente values('2012630450','micael','hermano','1985-12-18');
+insert into dependiente values('2012630450','martha','madre','1943-11-11');
+insert into dependiente values('2012630450','anselmo','padre','1941-05-11');
+insert into dependiente values('2012630330','angel','hijo','2000-11-01');
+insert into dependiente values('2012635864','jaquelin','hija','2012-05-25');
+insert into dependiente values('2012635864','mario','hijo','2013-07-04');
+insert into dependiente values('2012631234','alvaro','hijo','2000-07-01');
+insert into dependiente values('2012631234','manuel','hijo','2011-07-25');
+insert into dependiente values('2012631234','maria','hija','2005-08-04');
+insert into dependiente values('2012631234','angel','hijo','2000-11-01');
+insert into dependiente values('2012634892','miriam','hija','2008-06-15');
+insert into dependiente values('2012634892','oscar','hijo','2013-07-04');
+insert into proyecto values(1,'revolution',7,'coacalco estado de mexico');
+insert into proyecto values(3,'buscador',5,'ecatepec # 51 estado de mexico');
+insert into proyecto values(7,'hacking',11,'islas caiman de mexico');
+insert into proyecto values(11,'amor',7,'tultepec estado de mexico');
+insert into proyecto values(13,'desertor',5,'iztapaluca centro de mexico');
+insert into proyecto values(17,'involucret',11,'morelos y tijuna df');
+insert into proyecto values(31,'salve',7,'iztacalco  mexico df');
+insert into proyecto values(37,'milagros',7,'rio de los remedios mexico');
+insert into proyecto values(71,'recuperat',5,'tultepec estado de mexico');
+insert into proyecto values(33,'electron',11,'tequesquinaua ');
+insert into proyecto values(73,'pary',7,'allende #31 tutepec mexico');
+insert into lugar values(7,'bo. sanrafael #31 planta baja');
+insert into lugar values(5,'sanantoniol #31 planta alta');
+insert into lugar values(11,'santiago');
+insert into workIn values('2012630450',1,7);
+insert into workIn values('2012630330',1,4);
+insert into workIn values('2012630330',13,5);
+insert into workIn values('2012630330',73,6);
+insert into workIn values('2012635864',3,4);
+insert into workIn values('2012635864',17,8);
+insert into workIn values('2012635864',33,7);
+insert into workIn values('2012639764',11,2);
+insert into workIn values('2012639764',31,4);
+insert into workIn values('2012639764',33,1);
+insert into workIn values('2012634892',71,3);
+insert into workIn values('2012634892',31,1);
+insert into workIn values('2012631731',1,1);
+insert into workIn values('2012631731',7,1);
+insert into workIn values('2012631731',3,1);
+insert into workIn values('2012631731',11,1);
+insert into workIn values('2012631373',71,2);
+insert into workIn values('2012631373',31,1);
+insert into workIn values('2012631373',33,3);
+insert into workIn values('2012631173',7,1);
+insert into workIn values('2012631173',3,3);
+insert into workIn values('2012631111',1,7);
+
+select *from empleado where datebirh like '1950%' ;/*empleado que nacieeron el los 1950*/
+
+select empleado.name,round(salario*1.10,2) salario from empleado,proyecto,workIn where nssEmpleado=nss and numeroProyecto=numero and proyecto.name='hacking' order by(empleado.name) desc;/*salario de los empleado que trabajan en el proyecto hacking al 10% y los ordena de forma decendente z-a por defecto es acendente*/
+
+select sum(hours) hours,numeroProyecto from workIn group by (numeroProyecto) having hours>10;/*los proyectos alosque se les invierte mas de 10 horas*/
+
+select sum(salario) suma,max(salario) maximo,round(avg(salario)) promedio,min(salario) minimo from empleado;/*minimo maximo promedio suma de los salario*/
+
+select count(nss) from empleado;/*total de empleados*/
+
+select count(salario) salariosDistintos from (select distinct(salario) from empleado) salarioDistinto;/*el total de salarios distintos del todos los empleados*/
+
+select count(dependiente.nss) numeroDependientes ,empleado.name from empleado,dependiente where empleado.nss=dependiente.nss group by empleado.nss having numeroDependientes>=2;/*empleados que tienes 2 o mas dependietes*/
+
+select empleado.name,surnamePater,addres from empleado join departamento on nd=numero where departamento.name='google';/*empleadoque trabaja en el departamento de google*/
+
+select count(dependiente.nss) totalDependientes,empleado.name,empleado.nss from empleado join dependiente on empleado.nss=dependiente.nss group by empleado.nss;/*total de dependientes por empleado*/
+
+select count(nss) totalEmpleados,numero departamento from empleado join departamento on nd=numero group by (numero);/*numero de empleados por departamento*/
+
+select de2.name from (select max(te) max from (select count(numero) te,numero from empleado join departamento on numero=nd group by numero) de) maximo join (select count(numero) te2,numero,departamento.name from empleado join departamento on numero=nd group by numero) de2 on te2=max;/*departamentos con mayor numero de empleados*/
+
+select nd,count(nss) numeroEmpleados,round(avg(salario),2) salarioPromedio from empleado group by nd;/*numero de empleados y salario promedio por cada departamento */
+
+select numero,proyecto.name,empleado.name from empleado,proyecto,workIn where numeroProyecto=numero and nssEmpleado=nss;/*todos los proyectos y quienes trabajan en el*/
+
+select name from empleado where (select nss) not in (select nss from dependiente where empleado.nss=dependiente.nss);/*empleados que no tiene dependientes*/
+
+select nssEmpleado from workIn where numeroProyecto in (1,2,3);/*nss del empleado que trabaja en el proyecto 1 2 o 3*/
+
+select name from empleado,(select max(salario) max5 from empleado where nd=5) salmax where max5<salario and nd!=5 ;/*el nombre de los empleados que cullo salario es mayor alde todos los empleados del departamento 5*/
+
+(select numeroProyecto from empleado,workIn where surnamePater='cortes' and nss=nssEmpleado) union (select numeroProyecto from empleado,workIn,departamento where nss=nssGerente and surnamePater='cortes' and nss=nssEmpleado);/*el total de proyecto en losque partisipa el empleado con apeido cortes ya sea como trabajador o como gerente*/
+
+select nss from empleado where (select nss) not in (select empleado.nss from dependiente join empleado on empleado.nss=dependiente.nss);/*empleados que no tiene dependientes*/
+
+select empleado.name,empleado.surnamePater,aux.name,aux.surnamePater from empleado aux join empleado on aux.nss=empleado.nssSuper;/*empleados con su supervisor*/
+
+select datebirh,addres from empleado where name='ayan' and surnamePater='urban';/*fecha de nacimento y direccion del empleado cuyo nombre es ayan y apeido urban*/
+
+select empleado.name,addres from empleado,departamento where departamento.name='investigaci' and numero=nd;/*nombre y direccion de los empleados que trabajan en el departamento investigacion*/
+
+select proyecto.numero,numeroDepartamento,surnamePater,empleado.addres,datebirh from departamento,empleado,proyecto where proyecto.address='tequesquinaua' and numeroDepartamento=nd and nss=nssGerente;/*el numero de proyecto el numero de departamento el apeido direccion y fecha de nacimiento del gerente de dicho departamento que controla el proyecto uvicado en tequesquinaua	*/

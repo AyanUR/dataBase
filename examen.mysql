@@ -1,0 +1,60 @@
+/*
+	cambiar la contraseña mysql
+	service mysql stop
+	sudo mysqld_safe --skip-grant-tables &
+	UPDATE mysql.user SET Password=PASSWORD('root') WHERE User='root';
+	FLUSH PRIVILEGES;
+	exit;
+*/
+
+
+create schema examen;
+use examen;
+create table alumno(boleta char(20) not null,nombre char(17) not null,semestre int not null ,sexo char not null,primary key(boleta));
+create table materia(clave int not null,nombre char(11) not null,creditos int not null,primary key(clave));
+create table cursa(boletaAlumno char(20) not null,claveMateria int not null,calificacion int not null,primary key(boletaAlumno,claveMateria),foreign key(boletaAlumno) references alumno(boleta) on update cascade on delete cascade,foreign key(claveMateria) references materia(clave) on update cascade on delete cascade);
+
+insert into alumno values('2012630450','ayan',5,'m');
+insert into alumno values('2012631111','alejandra',5,'f');
+insert into alumno values('2012631731','marizol',7,'f');
+insert into alumno values('2012633171','tania',6,'f');
+insert into alumno values('2012630486','lizbet',4,'f');
+insert into alumno values('2012630330','moises',3,'m');
+insert into alumno values('2012635894','oscar',5,'m');
+insert into alumno values('2012638794','daniel',3,'m');
+insert into alumno values('2012637984','mauricio',7,'m');
+insert into alumno values('2012631596','nolasco',5,'m');
+insert into alumno values('2012633574','karen',7,'f');
+
+insert into materia values(1,'redes',35);
+insert into materia values(3,'apcre',37);
+insert into materia values(2,'bases',30);
+insert into materia values(4,'algoritmia',50);
+insert into materia values(5,'analisis',31);
+insert into materia values(6,'fundamentos',20);
+insert into materia values(7,'adoo',33);
+
+insert into cursa values('2012630450',1,10);
+insert into cursa values('2012630450',3,7);
+insert into cursa values('2012630450',4,10);
+insert into cursa values('2012631111',1,9);
+insert into cursa values('2012631111',3,10);
+insert into cursa values('2012631731',4,5);
+insert into cursa values('2012631731',5,8);
+insert into cursa values('2012633171',6,0);
+insert into cursa values('2012633171',7,9);
+insert into cursa values('2012630486',7,10);
+insert into cursa values('2012630330',6,8);
+insert into cursa values('2012635894',5,10);
+insert into cursa values('2012638794',4,5);
+insert into cursa values('2012633574',3,10);
+
+select count(sexo) totalWomanMen,sexo from alumno group by sexo; /* total de alumnos mujeres y hombres*/
+
+select avg(calificacion) promedio,nombre from alumno,cursa where boletaAlumno=boleta group by boletaAlumno;/*promedio de todos los alumnos*/
+
+select nombre from ((select avg(calificacion) p1,nombre from alumno,cursa where boletaAlumno=boleta group by boletaAlumno) ap1) join (select max(p2) m from (select avg(calificacion) p2,nombre from alumno,cursa where boletaAlumno=boleta group by boletaAlumno) ap2) ap3 on m=p1;/*nombre del alumno con promedio maximo*/
+
+select nombre,boleta from alumno where boleta not in (select  distinct(boleta) from cursa where boleta=boletaAlumno);/*nombre boleta del alumno que no cursa materias*/
+
+select nombre,boleta from alumno where not exists (select  distinct(boleta) from cursa where boleta=boletaAlumno);/*nombre boleta del alumno que no cursa materias*/
